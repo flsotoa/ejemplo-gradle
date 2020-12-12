@@ -5,9 +5,11 @@ Getting Started
 Comandos para ejecutar en Windows:
 
 •	Compile, test, jar:
+
   gradle build
 
 •	Run:
+
   gradle bootRun 
 
 •	Test:
