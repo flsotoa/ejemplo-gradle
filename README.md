@@ -4,13 +4,14 @@ Getting Started
 
 Comandos para ejecutar en Windows:
 
-•	Compile, test, jar: 
+•	Compile, test, jar:
   gradle build
 
-•	Run: 
+•	Run:
   gradle bootRun 
 
-•	Test: 
+•	Test:
+
   curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'
   
   O para revisar estado mundial ejecutar:
