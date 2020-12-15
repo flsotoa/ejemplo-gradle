@@ -6,12 +6,12 @@ pipeline {
             steps{
                 script{
                     stage("Build & test") {
-                        //
+			sh "gradlew clean build"
                     }
                     stage('SonarQube analysis') {
-    			def scannerHome = tool 'SonarScanner 4.0';
-    			withSonarQubeEnv('My SonarQube Server') {
-      			sh "$C:\\Users\\Flavio\\Downloads\\Downloads\\Universidad\\DiplomadoDevOpsUSACH\\Clases\\Unidad_3\\sonarqube-8.5.1.38104\				\sonarqube-8.5.1.38104\\bin\\sonar-scanner"
+    			def scannerHome = tool 'sonar-fsa';
+    			withSonarQubeEnv('sonar-fsa) {
+      			sh "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
                     }
                     stage("Run") {
                         //
