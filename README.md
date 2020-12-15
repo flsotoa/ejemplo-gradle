@@ -1,6 +1,6 @@
 # Ejemplo-gradle
 
-Getting Started
+Getting Started.
 
 Comandos para ejecutar en Windows:
 
