@@ -21,7 +21,7 @@ pipeline {
 							sleep 200
                     }	
                     stage("Tes_Rest") {
-							sh "curl -X GET localhost:8085/rest/mscovid/test?msg=testing"
+							sh "curl -X GET localhost:8085/rest/mscovid/test?msg=testing -O  && dir"
                     }
                     stage("uploadNexus") {
 							nexusPublisher nexusInstanceId: 'Nexus',
