@@ -9,7 +9,7 @@ pipeline {
 			sh "gradlew clean build"
                     }
                     stage('SonarQube analysis') {
-    			def scannerHome = tool 'sonar-fsa';
+    			def scannerHome = tool 'sonar-scanner';
     			withSonarQubeEnv('sonar-fsa) {
       			sh "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
                     }
