@@ -6,22 +6,27 @@ pipeline {
             steps{
                 script{
                     stage("Build & test") {
-			sh "gradle build"
+							sh "gradle build"
                     }
                     stage('SonarQube analysis') {
-			def scannerHome = tool 'sonar';
-			withSonarQubeEnv('sonar-fsa') {
-			bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
-			}
+							def scannerHome = tool 'sonar';
+							withSonarQubeEnv('sonar-fsa') {
+							bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
+						}
                     }
                     stage("Run") {
-                        //
+							sh "gradle bootRun &"
                     }
-                    stage("Rest") {
-                        //
+		    stage("Sleep") {
+							sleep 200
+                    }	
+                    stage("Tes_Rest") {
+							sh "curl -X GET localhost:8085/rest/mscovid/test?msg=testing"
                     }
-                    stage("Nexus") {
-                        //
+                    stage("uploadNexus") {
+							nexusPublisher nexusInstanceId: 'Nexus',
+							nexusRepositoryId: 'test-nexus',
+							packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: 'C:\\Users\\Flavio\\.jenkins\\workspace\\job-nexus\\DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '1.0.0']]]
                     }
                 }
             }
