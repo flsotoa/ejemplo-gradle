@@ -19,7 +19,7 @@ def call(){
 		sh "gradle bootRun &"
                     }
 	stage("Sleep") {
-		sleep 200
+		 sh 'sleep 200'
                   }	
         stage("Tes_Rest") {
 		sh "curl -X GET localhost:8085/rest/mscovid/test?msg=testing -O  && dir"
