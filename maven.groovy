@@ -49,7 +49,7 @@ def call(){
 			stage('Testing_aplication') {
                 steps {
                     
-                        sh 'curl -X GET http://localhost:8081/rest/mscovid/test?msg=testing'
+                        sh 'curl -X GET http://localhost:8085/rest/mscovid/test?msg=testing'
                     }
                 
             }	 
