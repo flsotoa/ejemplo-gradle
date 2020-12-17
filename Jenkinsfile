@@ -1,32 +1,21 @@
 pipeline {
     agent any
 
+    parameters { choice(name: 'herramienta', choices: ['gradle', 'maven'], description: '') }
     stages {
         stage('Pipeline') {
-            steps{
-                script{
-                    stage("Build & test") {
-							sh "gradle clean build"
-                    }
-                    stage('SonarQube analysis') {
-							def scannerHome = tool 'sonar';
-							withSonarQubeEnv('sonar-fsa') {
-							bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
-						}
-                    }
-                    stage("Run") {
-							sh "gradle bootRun &"
-                    }
-		    stage("Sleep") {
-							sleep 200
-                    }	
-                    stage("Tes_Rest") {
-							sh "curl -X GET localhost:8085/rest/mscovid/test?msg=testing -O  && dir"
-                    }
-                    stage("uploadNexus") {
-							nexusPublisher nexusInstanceId: 'Nexus',
-							nexusRepositoryId: 'test-nexus',
-							packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: 'C:\\Users\\Flavio\\.jenkins\\workspace\\job-nexus\\DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '1.0.0']]]
+            steps {
+                script {
+                    
+                   	 echo params.herramienta
+
+                	if (params.herramienta == 'gradle') {
+                        def ejecucion = load 'gradle.groovy'
+                        ejecucion.call()
+                	}	
+			else {
+                    	 def ejecucion = load 'maven.groovy'
+                      	ejecucion.call()
                     }
                 }
             }
