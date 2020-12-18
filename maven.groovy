@@ -17,17 +17,17 @@ def call(){
 				sh 'mvn.cmd clean package -e'
                 
             }
-            stage('SonarQube') {
+            stage("SonarQube") {
                      withSonarQubeEnv(installationName: 'sonar-fsa') {
                      sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'                 }
              }
-	    stage('Run Jar') {
+	    stage("Run Jar") {
                      sh 'mvn spring-boot:run &'
                     }
-            stage('Sleep') {
+            stage("Sleep") {
                      sh 'sleep 200'
 		}
-	    stage('Testing_aplication') {
+	    stage("Testing_aplication") {
                         sh 'curl -X GET http://localhost:8085/rest/mscovid/test?msg=testing'
                     }
             stage("Upload Nexus") {
