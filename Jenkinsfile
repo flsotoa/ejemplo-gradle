@@ -6,9 +6,8 @@ pipeline {
         stage('Pipeline') {
             steps {
                 script {
-                    
-                   	 echo params.herramienta
-
+                    	env.TAREA = ''
+                   	echo params.herramienta
                 	if (params.herramienta == 'gradle') {
                         def ejecucion = load 'gradle.groovy'
                         ejecucion.call()
@@ -21,4 +20,12 @@ pipeline {
             }
         }
     }
+	post{	
+		success{
+			slackSend message: ' [Flavio Soto][println env.JOB_NAME][params.buildtool]-Ejecución exitosa', teamDomain: 'devops-usach-2020', tokenCredentialId: 'slack-token'
+		}
+		failure{
+			slackSend message: '[Flavio Soto][env.JOB_NAME][println params.buildtool]-Ejecución fallida en stage [env.STAGE_NAME]', teamDomain: 'devops-usach-2020', tokenCredentialId: 'slack-token'
+		}
+	}
 }
