@@ -7,9 +7,11 @@
 
 def call(){
         stage("Build & test") {
+		env.TAREA =env.STAGE_NAME
 		sh "gradle clean build"
                     }
         stage("SonarQube analysis") {
+		env.TAREA =env.STAGE_NAME
 		def scannerHome = tool 'sonar';
 		withSonarQubeEnv('sonar-fsa') {
 		bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
@@ -19,10 +21,11 @@ def call(){
 		sh "gradle bootRun &"
                     }
 	stage("Sleep") {
-		 sh 'sleep 200'
+		 sh "sleep 200"
                   }	
         stage("Tes_Rest") {
 		sh "curl -X GET localhost:8085/rest/mscovid/test?msg=testing -O  && dir"
+		sh "sleep 100"
                     }
         stage("uploadNexus") {
 		nexusPublisher nexusInstanceId: 'Nexus',
