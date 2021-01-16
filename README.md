@@ -18,4 +18,4 @@ Comandos para ejecutar en Windows:
   
   O para revisar estado mundial ejecutar:
   curl -X GET 'http://localhost:8081/rest/mscovid/estadoMundial'
-.
+...........
