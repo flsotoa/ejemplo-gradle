@@ -1,35 +1,48 @@
-pipeline {
-    agent any
+def execute() {
+    def branchName = validate.getBranchName()
+    println 'run maven ci'
 
-    stages {
-        stage('Pipeline') {
-            steps{
-                script{
-                    stage("Build & test") {
-							sh "gradle clean build"
-                    }
-                    stage('SonarQube analysis') {
-							def scannerHome = tool 'sonar';
-							withSonarQubeEnv('sonar-fsa') {
-							bat "${scannerHome}\\bin\\sonar-scanner -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build"
-						}
-                    }
-                    stage("Run") {
-							sh "gradle bootRun &"
-                    }
-		    stage("Sleep") {
-							sleep 200
-                    }	
-                    stage("Tes_Rest") {
-							sh "curl -X GET localhost:8085/rest/mscovid/test?msg=testing -O  && dir"
-                    }
-                    stage("uploadNexus") {
-							nexusPublisher nexusInstanceId: 'Nexus',
-							nexusRepositoryId: 'test-nexus',
-							packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: 'C:\\Users\\Flavio\\.jenkins\\workspace\\job-nexus\\DevOpsUsach2020-0.0.1.jar']], mavenCoordinate: [artifactId: 'DevOpsUsach2020', groupId: 'com.devopsusach2020', packaging: 'jar', version: '1.0.0']]]
-                    }
-                }
-            }
-        }
+    stage('gitDiff') {
+        env.JENKINS_STAGE = env.STAGE_NAME
+        echo env.JENKINS_STAGE
+    
     }
+	stage('downloadNexus') {
+		env.JENKINS_STAGE = env.STAGE_NAME
+		echo env.JENKINS_STAGE
+		//se descarga repositorio mavenci-repo
+		sh 'curl -X GET -u admin:DevOps2020 http://192.81.214.49:8081/repository/mavenci-repo/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar -O'
+    }
+	
+	stage('run') {
+		//Ejecutar artefacto descargado.
+        env.JENKINS_STAGE = env.STAGE_NAME
+        echo env.JENKINS_STAGE
+    }
+	
+    stage('Test') {
+        env.JENKINS_STAGE = env.STAGE_NAME
+        echo env.JENKINS_STAGE
+        sh 'curl -X GET http://localhost:8081/rest/mscovid/test?msg=testing'
+    }
+	
+    stage('gitMergeMaster') {
+        env.JENKINS_STAGE = env.STAGE_NAME
+        echo env.JENKINS_STAGE
+       
+    }
+	
+	stage('gitMergeDevelop') {
+        env.JENKINS_STAGE = env.STAGE_NAME
+        echo env.JENKINS_STAGE
+        
+    }
+	stage('gitTagMaster') {
+        env.JENKINS_STAGE = env.STAGE_NAME
+        echo env.JENKINS_STAGE
+        
+	}	
+
 }
+
+return this
